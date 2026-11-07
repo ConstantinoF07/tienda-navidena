@@ -1,4 +1,4 @@
-# Tienda Navideña Veracruz: guía para cualquier sesión de Claude
+# Tu Rinconcito Navideño: guía para cualquier sesión de Claude
 
 Sitio estático de una sola página para vender adornos navideños artesanales en el puerto de
 Veracruz. Fachada de e-commerce con carrito, pero el "pago" es abrir WhatsApp con el pedido

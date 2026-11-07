@@ -1,4 +1,4 @@
-# Tienda Navideña Veracruz
+# Tu Rinconcito Navideño
 
 Catálogo de adornos navideños artesanales con pedido por WhatsApp. Sitio 100 % estático:
 HTML, CSS y JavaScript, sin servidor ni base de datos.

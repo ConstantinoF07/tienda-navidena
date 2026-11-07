@@ -7,7 +7,7 @@
    ===================================================================== */
 
 const TIENDA = {
-  nombre: "Tienda Navideña Veracruz",          // EDITAR: nombre real de la tienda
+  nombre: "Tu Rinconcito Navideño",            // nombre de la tienda
   eslogan: "Piezas únicas hechas a mano. Elige las tuyas, pide por WhatsApp y recógelas en tu punto de entrega.",
   whatsapp: "522291433176",                    // lada + número, sin "+" ni espacios
   ciudad: "Veracruz, Ver.",
