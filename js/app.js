@@ -51,7 +51,8 @@
   function textoDetalles(variantes, personalizacion, producto) {
     const partes = [];
     Object.keys(variantes || {}).forEach((k) => {
-      if (variantes[k]) partes.push(k + ": " + variantes[k]);
+      if (!variantes[k]) return;
+      partes.push(k === "Presentación" ? variantes[k] : k + ": " + variantes[k]);
     });
     if (personalizacion) {
       const etiqueta = producto && producto.personalizable ? producto.personalizable : "Personalización";
@@ -63,8 +64,9 @@
   function mensajeInteres(p, variantes, personalizacion, precioUnitario) {
     const det = textoDetalles(variantes, personalizacion, p);
     const pu = precioUnitario != null ? precioUnitario : (presentaciones(p) ? 0 : p.precio);
-    const conPrecio = pu ? ` de ${precio(pu)}` : "";
-    return `${TIENDA.mensajes.interes}: ${p.nombre}${det ? " " + det : ""}${conPrecio}`;
+    const conPrecio = pu ? ` de *${precio(pu)}*` : "";
+    /* Los asteriscos son el formato de negritas de WhatsApp */
+    return `${TIENDA.mensajes.interes}: *${p.nombre}*${det ? " " + det : ""}${conPrecio}`;
   }
 
   /* ---------- Carrito (estado) ---------- */
@@ -123,13 +125,14 @@
     const lineas = carrito.map((l) => {
       const p = buscarProducto(l.id);
       const det = textoDetalles(l.variantes, l.personalizacion, p);
-      return `• ${l.cantidad} × ${p.nombre}${det ? " " + det : ""} — ${precio(precioLinea(l, p) * l.cantidad)}`;
+      /* Los asteriscos son el formato de negritas de WhatsApp */
+      return `• ${l.cantidad} × *${p.nombre}*${det ? " " + det : ""} — *${precio(precioLinea(l, p) * l.cantidad)}*`;
     });
-    const partes = [TIENDA.mensajes.pedido, "", ...lineas, "", `Total: ${precio(totalCarrito())}`];
+    const partes = [TIENDA.mensajes.pedido, "", ...lineas, "", `*Total: ${precio(totalCarrito())}*`];
     const punto = buscarPunto(datosPedido.entrega);
-    if (punto) partes.push(`Recoger en: ${punto.nombre}${punto.direccion ? " (" + punto.direccion + ")" : ""}`);
-    if (datosPedido.nombre.trim()) partes.push(`Nombre: ${datosPedido.nombre.trim()}`);
-    if (datosPedido.nota.trim()) partes.push(`Comentarios: ${datosPedido.nota.trim()}`);
+    if (punto) partes.push(`*Recoger en:* ${punto.nombre}${punto.direccion ? " (" + punto.direccion + ")" : ""}`);
+    if (datosPedido.nombre.trim()) partes.push(`*Nombre:* ${datosPedido.nombre.trim()}`);
+    if (datosPedido.nota.trim()) partes.push(`*Comentarios:* ${datosPedido.nota.trim()}`);
     return partes.join("\n");
   }
 
