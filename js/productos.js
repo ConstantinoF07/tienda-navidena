@@ -13,6 +13,11 @@ const TIENDA = {
   ciudad: "Veracruz, Ver.",
   moneda: "MXN",
 
+  // Piezas únicas: solo hay una de cada producto. Con 1 no se pide cantidad y el
+  // carrito acepta una por producto. Un producto puede cambiarlo con su propio "maximo".
+  maximoPorProducto: 1,
+  avisoPiezaUnica: "Pieza única: solo tenemos una.",
+
   // Puntos de entrega. No hay envío a domicilio: el cliente elige dónde recoger.
   // EDITAR: nombre, dirección, horario y, si quieres, el enlace de Google Maps.
   puntosEntrega: [
@@ -60,6 +65,10 @@ const TIENDA = {
    personalizable   qué se personaliza (ej. "Nombre que llevará la esfera") o null
    destacado        true para mostrarlo primero con etiqueta
    disponible       false para mostrarlo como agotado
+   maximo           opcional: máximo de unidades por pedido para ESTE producto.
+                    Si no se pone, aplica TIENDA.maximoPorProducto (1 = pieza única)
+   disponibilidad   opcional: aviso corto en la ficha, ej. "Solo tenemos una caja".
+                    Si no se pone y es pieza única, se usa TIENDA.avisoPiezaUnica
    --------------------------------------------------------------------- */
 
 // Presentaciones compartidas por las tres cajas de esferas (no aplican a las piñatas)
@@ -166,6 +175,7 @@ const PRODUCTOS = [
     nombreCorto: "Esferas rojas",
     precio: 800,
     precioAnterior: null,
+    disponibilidad: "Solo tenemos una caja de este diseño.",
     presentaciones: PRESENTACIONES_ESFERAS(["esferas-monos-rojas", "esferas-blancas-tradicional"]),
     categoria: "Para el árbol",
     descripcionCorta: "Esferas con diseño en rojo, verde y dorado. Media docena, caja de 12 o combinada.",
@@ -186,6 +196,7 @@ const PRODUCTOS = [
     nombreCorto: "Esferas blancas con moños rojos",
     precio: 800,
     precioAnterior: null,
+    disponibilidad: "Solo tenemos una caja de este diseño.",
     presentaciones: PRESENTACIONES_ESFERAS(["esferas-rojas", "esferas-blancas-tradicional"]),
     categoria: "Para el árbol",
     descripcionCorta: "Esferas blancas decoradas con moños rojos. Media docena, caja de 12 o combinada.",
@@ -206,6 +217,7 @@ const PRODUCTOS = [
     nombreCorto: "Esferas blancas tradicionales",
     precio: 800,
     precioAnterior: null,
+    disponibilidad: "Solo tenemos una caja de este diseño.",
     presentaciones: PRESENTACIONES_ESFERAS(["esferas-rojas", "esferas-monos-rojas"]),
     categoria: "Para el árbol",
     descripcionCorta: "Esferas blancas con hojas verdes y listones rojos. Media docena, caja de 12 o combinada.",

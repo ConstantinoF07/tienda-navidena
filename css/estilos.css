@@ -637,6 +637,16 @@ dialog.dialogo::backdrop { background: rgba(20, 10, 10, 0.55); }
   font-weight: 700;
 }
 .ficha__descripcion { margin-top: 12px; }
+.ficha__disponibilidad {
+  margin-top: 6px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--rojo);
+}
+.linea__unico {
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
 .detalles {
   display: grid;
   grid-template-columns: auto 1fr;

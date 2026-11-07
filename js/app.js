@@ -100,11 +100,33 @@
     && JSON.stringify(a.variantes || {}) === JSON.stringify(b.variantes || {})
     && (a.personalizacion || "") === (b.personalizacion || "");
 
+  const maximoDe = (p) => {
+    if (p && p.maximo > 0) return p.maximo;
+    if (TIENDA.maximoPorProducto > 0) return TIENDA.maximoPorProducto;
+    return 99;
+  };
+  const textoDisponibilidad = (p) => p.disponibilidad || (maximoDe(p) === 1 ? (TIENDA.avisoPiezaUnica || "") : "");
+
+  /* Devuelve cuántas unidades se agregaron de verdad (0 si ya estaba al máximo) */
   function agregarAlCarrito(linea) {
+    const p = buscarProducto(linea.id);
+    const max = maximoDe(p);
     const existente = carrito.find((l) => mismaLinea(l, linea));
-    if (existente) existente.cantidad += linea.cantidad;
-    else carrito.push(linea);
+    /* El máximo cuenta todas las líneas del mismo producto (distintas presentaciones) */
+    const otras = carrito.filter((l) => l.id === linea.id && l !== existente).reduce((s, l) => s + l.cantidad, 0);
+    const tope = Math.max(0, max - otras);
+    let agregadas = 0;
+    if (existente) {
+      const nueva = Math.min(tope, existente.cantidad + linea.cantidad);
+      agregadas = Math.max(0, nueva - existente.cantidad);
+      existente.cantidad = Math.max(existente.cantidad, nueva);
+    } else if (tope > 0) {
+      linea.cantidad = Math.min(tope, linea.cantidad);
+      agregadas = linea.cantidad;
+      carrito.push(linea);
+    }
     guardarCarrito();
+    return agregadas;
   }
 
   const cantidadTotal = () => carrito.reduce((s, l) => s + l.cantidad, 0);
@@ -329,13 +351,14 @@
   <div class="ficha__datos">
     <h2 id="ficha-titulo" class="ficha__titulo">${esc(p.nombre)}</h2>
     <p class="ficha__precio" data-ficha-precio>${pr ? esc(precio(pr[0].precio)) : htmlPrecio(p)}</p>
+    ${textoDisponibilidad(p) ? `<p class="ficha__disponibilidad">${esc(textoDisponibilidad(p))}</p>` : ""}
     <p class="ficha__descripcion">${esc(p.descripcion || p.descripcionCorta || "")}</p>
     ${detalles.length ? `<dl class="detalles">${detalles.map((d) => `<dt>${esc(d[0])}</dt><dd>${esc(d[1])}</dd>`).join("")}</dl>` : ""}
     <form class="ficha__form" data-ficha-form>
       ${bloquePresentaciones}
       ${variantes}
       ${personal}
-      ${conPrecio ? `<label class="campo"><span>Cantidad</span>
+      ${conPrecio && maximoDe(p) > 1 ? `<label class="campo"><span>Cantidad</span>
         <span class="cantidad">
           <button type="button" data-accion="menos-ficha" aria-label="Menos">&minus;</button>
           <input type="number" name="cantidad" min="1" max="99" value="1" inputmode="numeric">
@@ -500,11 +523,11 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     <p class="linea__precio">${esc(precio(precioLinea(l, p) * l.cantidad))}</p>
   </div>
   <div class="linea__controles">
-    <span class="cantidad">
+    ${maximoDe(p) > 1 ? `<span class="cantidad">
       <button type="button" data-accion="menos" data-indice="${i}" aria-label="Quitar uno">&minus;</button>
       <span>${l.cantidad}</span>
       <button type="button" data-accion="mas" data-indice="${i}" aria-label="Agregar uno">+</button>
-    </span>
+    </span>` : `<span class="linea__unico">Pieza única</span>`}
     <button type="button" class="linea__quitar" data-accion="quitar" data-indice="${i}">Quitar</button>
   </div>
 </li>`;
@@ -579,8 +602,8 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
       case "agregar-rapido": {
         const p = buscarProducto(el.dataset.id);
         if (!p || !p.disponible || !tienePrecio(p)) return;
-        agregarAlCarrito({ id: p.id, cantidad: 1, variantes: {}, personalizacion: "", precioUnitario: Number(p.precio) || 0 });
-        aviso(`${p.nombre} agregado al carrito`);
+        const n = agregarAlCarrito({ id: p.id, cantidad: 1, variantes: {}, personalizacion: "", precioUnitario: Number(p.precio) || 0 });
+        aviso(n ? `${p.nombre} agregado al carrito` : "Ese producto ya está en tu pedido: es pieza única");
         break;
       }
       case "galeria-mover":
@@ -603,7 +626,8 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
       case "menos": {
         const l = carrito[indice];
         if (!l) return;
-        l.cantidad += accion === "mas" ? 1 : -1;
+        const otras = carrito.filter((x) => x.id === l.id && x !== l).reduce((s, x) => s + x.cantidad, 0);
+        l.cantidad = Math.min(Math.max(0, maximoDe(buscarProducto(l.id)) - otras), l.cantidad + (accion === "mas" ? 1 : -1));
         if (l.cantidad <= 0) carrito.splice(indice, 1);
         guardarCarrito();
         renderCarrito();
@@ -632,9 +656,9 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     if (!p || !p.disponible || !tienePrecio(p)) return;
     const d = leerFormularioFicha();
     const sel = seleccionFicha(p, d);
-    agregarAlCarrito({ id: p.id, cantidad: d.cantidad, variantes: sel.variantes, personalizacion: d.personalizacion, precioUnitario: sel.precioUnitario });
+    const n = agregarAlCarrito({ id: p.id, cantidad: d.cantidad, variantes: sel.variantes, personalizacion: d.personalizacion, precioUnitario: sel.precioUnitario });
     cerrarDialogos();
-    aviso(`${p.nombre} agregado al carrito`);
+    aviso(n ? `${p.nombre} agregado al carrito` : "Ese producto ya está en tu pedido: es pieza única");
   });
 
   function sincronizarFormularios(e) {
