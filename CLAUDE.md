@@ -27,7 +27,13 @@ dominio propio. Dueño: usuario principiante en GitHub; explicar en español, co
 - `js/productos.js`: bloque `TIENDA` (nombre, WhatsApp, puntos de entrega con coordenadas,
   mensajes) y lista `PRODUCTOS`. Es el único archivo que el dueño edita.
 - `js/app.js`: catálogo, ficha con galería, carrito, mensajes de WhatsApp, mapa.
-- `css/estilos.css`: estilos. Colores y tipografía en `:root`. El diseño actual es provisional.
+- `css/estilos.css`: estilos. Colores y tipografía en `:root` (rojo profundo, verde pino, dorado,
+  crema; títulos en Fraunces desde Google Fonts, cuerpo en fuente del sistema). La portada es una
+  escena por capas: esferas colgando de hilos dorados a la izquierda y el gnomo a la derecha, con
+  una sola animación de entrada (balanceo). Las posiciones viven en `.escena__colgante--N`.
+- `img/portada/`: recortes con transparencia hechos a partir de las fotos de producto (gnomo en
+  dos tamaños y tres esferas en círculo). `img/og.png` (1200x630) es la vista previa al compartir;
+  se generó con esos mismos recortes. Si cambia el nombre de la tienda hay que regenerarla.
 - `js/vendor/leaflet/`: librería del mapa (OpenStreetMap, sin llaves). No usar Google Maps API.
 - `img/productos/<id>/`: fotos WebP (1200 px y miniatura 600 px) y `video.mp4` cuadrado de
   720 px, máximo 15 s. Se generan con `tools/optimizar.js` desde las fotos originales, que no

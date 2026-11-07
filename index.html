@@ -28,8 +28,14 @@
 
   <meta name="theme-color" content="#8b1e2d">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <!-- Fuente de los títulos (Fraunces). Si no carga, se usa una serif del sistema. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap">
   <!-- El ?v= cambia en cada publicación para que los celulares no usen archivos viejos -->
-  <link rel="stylesheet" href="css/estilos.css?v=20261107f">
+  <link rel="stylesheet" href="css/estilos.css?v=20261108a">
+  <link rel="preload" as="image" href="img/portada/gnomo-m.webp" media="(max-width: 879px)">
+  <link rel="preload" as="image" href="img/portada/gnomo.webp" media="(min-width: 880px)">
 
   <script type="application/ld+json">
   {
@@ -70,23 +76,37 @@
   <main id="inicio">
     <section class="portada" aria-labelledby="portada-titulo">
       <div class="portada__interior">
-        <p class="portada__nota">Portada provisional: aquí irá la escena del gnomo con las esferas</p>
-        <h1 id="portada-titulo">Adornos navideños artesanales, hechos en Veracruz</h1>
-        <p class="portada__texto" data-tienda="eslogan">Adornos navideños artesanales, hechos a mano en el puerto de Veracruz.</p>
-        <a class="boton boton--primario" href="#catalogo">Ver el catálogo</a>
+        <div class="portada__texto-bloque">
+          <p class="portada__etiqueta">Hecho a mano en el puerto de Veracruz</p>
+          <h1 id="portada-titulo">Adornos navideños <em>artesanales</em> para tu casa</h1>
+          <p class="portada__texto" data-tienda="eslogan">Piezas únicas hechas a mano. Elige las tuyas, pide por WhatsApp y recógelas en tu punto de entrega.</p>
+          <div class="portada__acciones">
+            <a class="boton boton--dorado" href="#catalogo">Ver el catálogo</a>
+            <a class="boton boton--contorno" data-whatsapp-duda href="#" target="_blank" rel="noopener">Escríbenos</a>
+          </div>
+        </div>
+        <!-- Escena por capas: esferas colgando al frente y a la izquierda, gnomo a la derecha.
+             Las imágenes son recortes de las fotos de los productos (img/portada). -->
+        <div class="escena" aria-hidden="true">
+          <span class="escena__luz"></span>
+          <div class="escena__colgante escena__colgante--2"><span class="escena__hilo"></span><img src="img/portada/esfera-blanca.webp" alt="" width="320" height="320" decoding="async"></div>
+          <div class="escena__colgante escena__colgante--1"><span class="escena__hilo"></span><img src="img/portada/esfera-roja.webp" alt="" width="320" height="320" decoding="async"></div>
+          <div class="escena__colgante escena__colgante--3"><span class="escena__hilo"></span><img src="img/portada/esfera-monos.webp" alt="" width="320" height="320" decoding="async"></div>
+          <img class="escena__gnomo" src="img/portada/gnomo.webp" srcset="img/portada/gnomo-m.webp 485w, img/portada/gnomo.webp 839w" sizes="(min-width: 880px) 430px, 70vw" alt="" width="839" height="900" fetchpriority="high">
+        </div>
       </div>
     </section>
 
     <p class="aviso" data-aviso hidden></p>
 
     <section id="catalogo" class="catalogo" aria-labelledby="catalogo-titulo">
-      <h2 id="catalogo-titulo">Catálogo</h2>
+      <h2 id="catalogo-titulo" class="titulo-seccion">Catálogo</h2>
       <div class="filtros" data-filtros role="group" aria-label="Filtrar por categoría"></div>
       <div class="rejilla" data-catalogo></div>
     </section>
 
     <section class="como-pedir" aria-labelledby="como-titulo">
-      <h2 id="como-titulo">Cómo pedir</h2>
+      <h2 id="como-titulo" class="titulo-seccion">Cómo pedir</h2>
       <ol class="pasos">
         <li><strong>Elige tus adornos</strong>Agrega al pedido lo que te guste, con color o nombre si aplica.</li>
         <li><strong>Envíanos el pedido</strong>Elige tu punto de entrega y toca "Pedir por WhatsApp": se abre el chat con tu lista ya escrita.</li>
@@ -95,7 +115,7 @@
     </section>
 
     <section id="entrega" class="puntos" aria-labelledby="puntos-titulo">
-      <h2 id="puntos-titulo">Puntos de entrega</h2>
+      <h2 id="puntos-titulo" class="titulo-seccion">Puntos de entrega</h2>
       <p class="puntos__intro">No hacemos envíos a domicilio. Eliges el punto que te quede mejor y pasas por tu pedido.</p>
       <div class="mapa-bloque">
         <div class="mapa__acciones">
@@ -110,7 +130,8 @@
   </main>
 
   <footer class="pie">
-    <p><span data-tienda="nombre">Tienda Navideña Veracruz</span>, en <span data-tienda="ciudad">Veracruz, Ver.</span></p>
+    <p class="pie__marca"><span data-tienda="nombre">Tienda Navideña Veracruz</span></p>
+    <p>Adornos navideños artesanales en <span data-tienda="ciudad">Veracruz, Ver.</span></p>
     <p><a data-whatsapp-duda href="#" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></p>
   </footer>
 
@@ -128,7 +149,7 @@
 
   <div class="toast" data-toast role="status" aria-live="polite"></div>
 
-  <script src="js/productos.js?v=20261107f" defer></script>
-  <script src="js/app.js?v=20261107f" defer></script>
+  <script src="js/productos.js?v=20261108a" defer></script>
+  <script src="js/app.js?v=20261108a" defer></script>
 </body>
 </html>
