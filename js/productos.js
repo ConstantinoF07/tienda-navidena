@@ -67,6 +67,10 @@ const TIENDA = {
    (las rutas de imagenes, miniatura y video las genera tools/optimizar.js)
    variantes        lista de { nombre, opciones } o [] si no hay
    personalizable   qué se personaliza (ej. "Nombre que llevará la esfera") o null
+   grupo            opcional: mismo nombre en los productos que son el mismo adorno en
+                    otro color (ej. "nacimiento-tetera"). En la ficha aparece el selector
+                    de color y, abajo, la tarjeta del otro color
+   color            nombre del color de ESTE producto cuando tiene grupo (ej. "Rojo")
    destacado        true para mostrarlo primero con etiqueta
    disponible       false para mostrarlo como agotado
    maximo           opcional: máximo de unidades por pedido para ESTE producto.
@@ -98,7 +102,7 @@ const PRODUCTOS = [
     video: "img/productos/gnomo-santa-entrada/video.mp4",
     variantes: [],
     personalizable: null,
-    destacado: true,
+    destacado: false,
     disponible: true
   },
   {
@@ -170,7 +174,7 @@ const PRODUCTOS = [
     video: "img/productos/carrusel-esferas/video.mp4",
     variantes: [],
     personalizable: null,
-    destacado: true,
+    destacado: false,
     disponible: true
   },
   {
@@ -256,6 +260,8 @@ const PRODUCTOS = [
   },
   {
     id: "nacimiento-talavera-azul",
+    grupo: "nacimiento-tetera",
+    color: "Azul",
     nombre: "Nacimiento luminoso en tetera estilo talavera azul",
     precio: 1600,
     precioAnterior: null,
@@ -274,6 +280,8 @@ const PRODUCTOS = [
   },
   {
     id: "nacimiento-talavera-rojo",
+    grupo: "nacimiento-tetera",
+    color: "Rojo",
     nombre: "Nacimiento luminoso en tetera estilo talavera rojo",
     precio: 1600,
     precioAnterior: null,
@@ -328,6 +336,8 @@ const PRODUCTOS = [
   },
   {
     id: "cascanueces-azul",
+    grupo: "cascanueces-grande",
+    color: "Azul",
     nombre: "Soldado cascanueces azul",
     precio: 800,
     precioAnterior: null,
@@ -346,6 +356,8 @@ const PRODUCTOS = [
   },
   {
     id: "cascanueces-rojo",
+    grupo: "cascanueces-grande",
+    color: "Rojo",
     nombre: "Soldado cascanueces rojo",
     precio: 800,
     precioAnterior: null,
@@ -364,6 +376,8 @@ const PRODUCTOS = [
   },
   {
     id: "cascanueces-blancos-mesa",
+    grupo: "cascanueces-mesa",
+    color: "Blanco y dorado",
     nombre: "Set de 4 cascanueces blancos para mesa",
     precio: 500,
     precioAnterior: null,
@@ -382,6 +396,8 @@ const PRODUCTOS = [
   },
   {
     id: "cascanueces-tradicional-mesa",
+    grupo: "cascanueces-mesa",
+    color: "Tradicional",
     nombre: "Set de 4 cascanueces tradicionales para mesa",
     precio: 500,
     precioAnterior: null,

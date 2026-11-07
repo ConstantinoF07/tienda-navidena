@@ -183,22 +183,6 @@ h1, h2, h3, .marca {
   justify-items: start;
   max-width: 34rem;
 }
-.portada__etiqueta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--dorado-claro);
-}
-.portada__etiqueta::before {
-  content: "";
-  width: 22px;
-  height: 2px;
-  background: var(--dorado);
-}
 .portada h1 {
   font-size: clamp(2.15rem, 7.4vw, 3.7rem);
   line-height: 1.04;
@@ -922,6 +906,90 @@ dialog.dialogo::backdrop { background: rgba(10, 31, 23, 0.6); }
   color: var(--rojo-oscuro);
 }
 .ficha__descripcion { margin-top: 12px; }
+
+/* Colores: el mismo adorno en otro color es otro producto; al elegirlo cambia la ficha */
+.colores { margin-top: 14px; }
+.colores__titulo {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+  color: var(--tinta-suave);
+}
+.colores__titulo b { color: var(--tinta); }
+.colores__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.color-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 14px 6px 6px;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.color-chip img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.color-chip[aria-pressed="true"] {
+  border-color: var(--rojo);
+  box-shadow: inset 0 0 0 1px var(--rojo);
+  background: #fff8f0;
+  cursor: default;
+}
+
+/* Tarjeta del otro color, al final de la ficha */
+.relacionado {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 8px 12px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  background: #fff;
+}
+.relacionado__titulo {
+  grid-column: 1 / -1;
+  font-size: 0.875rem;
+  color: var(--tinta-suave);
+}
+.relacionado__media {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.relacionado__media img {
+  width: 84px;
+  height: 84px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.relacionado__nombre {
+  font-family: var(--fuente-titulo);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.relacionado__precio { font-weight: 700; color: var(--rojo-oscuro); margin-top: 2px; }
+.relacionado .boton {
+  grid-column: 1 / -1;
+  min-height: 42px;
+}
+@media (min-width: 480px) {
+  .relacionado { grid-template-columns: 84px 1fr auto; }
+  .relacionado .boton { grid-column: auto; }
+}
 .ficha__disponibilidad {
   margin-top: 6px;
   font-size: 0.875rem;

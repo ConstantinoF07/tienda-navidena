@@ -39,6 +39,10 @@
     return pr ? Math.min(...pr.map((o) => Number(o.precio) || 0)) : (Number(p.precio) || 0);
   };
   const tienePrecio = (p) => precioMinimo(p) > 0;
+  /* Productos del mismo "grupo" (el mismo adorno en otro color), sin el actual */
+  const otrosColores = (p) => (p && p.grupo)
+    ? PRODUCTOS.filter((q) => q.grupo === p.grupo && q.id !== p.id && q.color)
+    : [];
   const precioLinea = (l, p) => (l.precioUnitario != null ? Number(l.precioUnitario) : Number(p.precio) || 0);
 
   /* ---------- WhatsApp ---------- */
@@ -318,6 +322,32 @@
     const conPrecio = tienePrecio(p);
     const pr = presentaciones(p);
 
+    /* Mismo adorno en otros colores: cada color es un producto distinto (pieza única).
+       Arriba, un selector con el color actual marcado; abajo, la tarjeta del otro color. */
+    const otros = otrosColores(p);
+    const bloqueColores = otros.length ? `
+      <div class="colores">
+        <span class="colores__titulo">Color: <b>${esc(p.color)}</b></span>
+        <div class="colores__lista" role="group" aria-label="Elegir color">
+          ${[p].concat(otros).map((q) => `
+          <button type="button" class="color-chip" data-accion="${q.id === p.id ? "nada" : "abrir-ficha"}" data-id="${esc(q.id)}" aria-pressed="${q.id === p.id}">
+            <img src="${esc(q.miniatura || imagenPrincipal(q))}" alt="" width="28" height="28" loading="lazy">${esc(q.color)}
+          </button>`).join("")}
+        </div>
+      </div>` : "";
+    const bloqueRelacionados = otros.map((q) => `
+      <div class="relacionado">
+        <p class="relacionado__titulo">También lo tenemos en ${esc(q.color.toLowerCase())}</p>
+        <button type="button" class="relacionado__media" data-accion="abrir-ficha" data-id="${esc(q.id)}" aria-label="Ver ${esc(q.nombre)}">
+          <img src="${esc(q.miniatura || imagenPrincipal(q))}" alt="${esc(q.alt || q.nombre)}" width="84" height="84" loading="lazy">
+        </button>
+        <div>
+          <p class="relacionado__nombre">${esc(q.nombre)}</p>
+          <p class="relacionado__precio">${htmlPrecio(q)}</p>
+        </div>
+        <button type="button" class="boton boton--primario" data-accion="abrir-ficha" data-id="${esc(q.id)}">Ver en ${esc(q.color.toLowerCase())}</button>
+      </div>`).join("");
+
     const bloquePresentaciones = pr ? `
       <fieldset class="presentaciones"><legend>Elige tu presentación</legend>
         ${pr.map((o, i) => `
@@ -352,6 +382,7 @@
     <h2 id="ficha-titulo" class="ficha__titulo">${esc(p.nombre)}</h2>
     <p class="ficha__precio" data-ficha-precio>${pr ? esc(precio(pr[0].precio)) : htmlPrecio(p)}</p>
     ${textoDisponibilidad(p) ? `<p class="ficha__disponibilidad">${esc(textoDisponibilidad(p))}</p>` : ""}
+    ${bloqueColores}
     <p class="ficha__descripcion">${esc(p.descripcion || p.descripcionCorta || "")}</p>
     ${detalles.length ? `<dl class="detalles">${detalles.map((d) => `<dt>${esc(d[0])}</dt><dd>${esc(d[1])}</dd>`).join("")}</dl>` : ""}
     <form class="ficha__form" data-ficha-form>
@@ -370,6 +401,7 @@
         <a class="boton boton--whatsapp${conPrecio ? "" : " boton--ancho"}" data-ficha-interes href="${esc(urlWhatsApp(mensajeInteres(p)))}" target="_blank" rel="noopener">${conPrecio ? "Lo quiero por WhatsApp" : "Preguntar precio por WhatsApp"}</a>
       </div>
     </form>
+    ${bloqueRelacionados}
   </div>
 </div>`;
   }
