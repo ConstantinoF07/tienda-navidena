@@ -293,7 +293,7 @@ const PRODUCTOS = [
   {
     id: "nacimiento-blanco",
     nombre: "Nacimiento artesanal blanco",
-    precio: 0,
+    precio: 1200,
     precioAnterior: null,
     categoria: "Nacimientos",
     descripcionCorta: "Nacimiento de figuras en tonos blancos y crema con detalles suaves.",
@@ -311,7 +311,7 @@ const PRODUCTOS = [
   {
     id: "nacimiento-tradicional",
     nombre: "Nacimiento artesanal tradicional",
-    precio: 0,
+    precio: 1200,
     precioAnterior: null,
     categoria: "Nacimientos",
     descripcionCorta: "Nacimiento de figuras de colores, de estilo tradicional.",
