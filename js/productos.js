@@ -300,6 +300,8 @@ const PRODUCTOS = [
   },
   {
     id: "nacimiento-blanco",
+    grupo: "nacimiento-figuras",
+    color: "Blanco",
     nombre: "Nacimiento artesanal blanco",
     precio: 1200,
     precioAnterior: null,
@@ -318,6 +320,8 @@ const PRODUCTOS = [
   },
   {
     id: "nacimiento-tradicional",
+    grupo: "nacimiento-figuras",
+    color: "Tradicional",
     nombre: "Nacimiento artesanal tradicional",
     precio: 1200,
     precioAnterior: null,
