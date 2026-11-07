@@ -788,7 +788,7 @@ h1, h2, h3, .marca {
 
 /* ---------- Pie ---------- */
 .pie {
-  padding: 32px 16px 100px;
+  padding: 32px 16px 96px;
   text-align: center;
   background: var(--verde-noche);
   color: var(--crema);
@@ -1214,29 +1214,11 @@ legend {
   color: var(--tinta-suave);
 }
 
-/* ---------- Botón flotante de WhatsApp ---------- */
-.flotante {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  z-index: 30;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: var(--whatsapp);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 10px 24px rgba(11, 61, 34, 0.35);
-  transition: transform 0.15s ease;
-}
-.flotante:hover { transform: scale(1.05); }
-.flotante svg { width: 32px; height: 32px; fill: #fff; }
-
 /* ---------- Barra inferior "Concluir compra" (solo con carrito lleno) ---------- */
 .barra-pedido {
   position: fixed;
   left: 16px;
-  right: 90px;
+  right: 16px;
   bottom: 16px;
   z-index: 30;
 }
