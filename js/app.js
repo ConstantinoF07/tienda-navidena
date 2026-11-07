@@ -24,7 +24,8 @@
 
   const $ = (sel, ctx) => (ctx || document).querySelector(sel);
   const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
-  const precio = (n) => formato.format(Number(n) || 0);
+  /* Los precios se muestran como "$1,200 MXN" para que quede claro que son pesos mexicanos */
+  const precio = (n) => formato.format(Number(n) || 0) + " " + (TIENDA.moneda || "MXN");
   const esc = (t) => String(t == null ? "" : t)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
