@@ -2,8 +2,8 @@
 
 Sitio estático de una sola página para vender adornos navideños artesanales en el puerto de
 Veracruz. Fachada de e-commerce con carrito, pero el "pago" es abrir WhatsApp con el pedido
-escrito. Se publica desde GitHub Pages (rama `main`) y después desde Cloudflare Pages con
-dominio propio. Dueño: usuario principiante en GitHub; explicar en español, con pasos simples.
+escrito. Se publica en Cloudflare (Workers con archivos estáticos) conectado a la rama `main`,
+en https://turinconcitonavideno.com; GitHub Pages queda solo como respaldo. Dueño: usuario principiante en GitHub; explicar en español, con pasos simples.
 
 ## Reglas del negocio (no cambiar sin que el dueño lo pida)
 
@@ -22,9 +22,8 @@ dominio propio. Dueño: usuario principiante en GitHub; explicar en español, co
 
 ## Dónde está cada cosa
 
-- `index.html`: estructura, SEO, Open Graph, datos estructurados. Mientras el sitio esté en la
-  dirección temporal de GitHub Pages lleva `<meta name="robots" content="noindex">`: quitarlo
-  al publicar con dominio propio, y cambiar `TU-DOMINIO.com` por el dominio real.
+- `index.html`: estructura, SEO, Open Graph, datos estructurados. El dominio real es
+  https://turinconcitonavideno.com (canonical, og:url, sitemap y robots ya lo usan).
 - `js/productos.js`: bloque `TIENDA` (nombre, WhatsApp, puntos de entrega con coordenadas,
   mensajes) y lista `PRODUCTOS`. Es el único archivo que el dueño edita.
 - `js/app.js`: catálogo, ficha con galería, carrito, mensajes de WhatsApp, mapa.
@@ -50,6 +49,6 @@ dominio propio. Dueño: usuario principiante en GitHub; explicar en español, co
   `?v=` en `index.html` (los tres enlaces) para que los celulares no usen archivos viejos.
 - Probar en ancho de celular (390 px) antes de subir: la mayoría de clientes entra desde el
   teléfono. Verificar que ningún botón se salga de su tarjeta.
-- Cada `git push` a `main` publica en https://constantinof07.github.io/tienda-navidena/ en
-  uno o dos minutos. GitHub Pages guarda archivos 10 minutos en caché.
+- Cada `git push` a `main` publica en https://turinconcitonavideno.com en un minuto (Cloudflare)
+  y en la dirección de respaldo https://constantinof07.github.io/tienda-navidena/.
 - Commits en español, cortos, describiendo el cambio para el dueño.
