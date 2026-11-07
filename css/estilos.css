@@ -384,6 +384,26 @@ h1, h2, h3, p { margin: 0; }
   border-radius: 8px;
   object-fit: cover;
 }
+.combinar__vista {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+.combinar__vista:empty { display: none; }
+.combinar__titulo {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.combinar__vista img,
+.combinar__vista video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #111;
+}
 .precio-pendiente {
   font-size: 0.9rem;
   font-weight: 700;

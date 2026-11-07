@@ -317,6 +317,7 @@
           <span>${esc(q.nombreCorto || q.nombre)}</span>
         </label>`;
         }).join("")}
+        <div class="combinar__vista" data-combinar-vista="${esc(o.id)}"></div>
       </fieldset>`).join("")}` : "";
 
     cont.innerHTML = `
@@ -396,7 +397,27 @@
     if (!p) return;
     const d = leerFormularioFicha();
     const sel = seleccionFicha(p, d);
-    $$("[data-combinar]").forEach((f) => { f.hidden = f.dataset.combinar !== d.presentacion; });
+    $$("[data-combinar]").forEach((f) => {
+      f.hidden = f.dataset.combinar !== d.presentacion;
+      if (f.hidden) $$("video", f).forEach((v) => v.pause());
+    });
+    /* Vista grande del diseño con el que se combina: su foto y, debajo, su video */
+    const vista = $(`[data-combinar-vista="${d.presentacion}"]`);
+    if (vista) {
+      const q = buscarProducto(d.combinada);
+      if (!q) {
+        vista.innerHTML = "";
+        vista.dataset.actual = "";
+      } else if (vista.dataset.actual !== q.id) {
+        vista.dataset.actual = q.id;
+        vista.innerHTML = `
+<p class="combinar__titulo">Así son las ${esc(q.nombreCorto || q.nombre)}</p>
+<img src="${esc(imagenPrincipal(q))}" alt="${esc(q.alt || q.nombre)}" width="800" height="800" loading="lazy">
+${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" controls muted loop playsinline preload="metadata"></video>` : ""}`;
+        const v = $("video", vista);
+        if (v) v.play().catch(() => { /* el navegador puede bloquear el autoplay */ });
+      }
+    }
     const pe = $("[data-ficha-precio]");
     if (pe && presentaciones(p)) pe.textContent = precio(sel.precioUnitario);
     const a = $("[data-ficha-interes]");
