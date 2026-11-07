@@ -24,10 +24,10 @@ const TIENDA = {
   // aparecen dos números, por ejemplo 19.2006, -96.1360. El primero es lat, el segundo lng.
   // "mapa" es opcional: un enlace propio de "Cómo llegar"; si va vacío se arma solo.
   puntosEntrega: [
-    // Direcciones tomadas del mapa, POR CONFIRMAR. Falta el horario de cada punto.
-    { nombre: "Divertiplaza", direccion: "Calle Fidel Velázquez, Col. Villa Rica, Veracruz", referencia: "", horario: "Horario por definir", lat: 19.2127177, lng: -96.2008532, mapa: "" },
-    { nombre: "Soriana Hiper Los Pinos", direccion: "Av. Cuauhtémoc, Col. Playa Linda, Veracruz", referencia: "", horario: "Horario por definir", lat: 19.2140814, lng: -96.1722379, mapa: "" },
-    { nombre: "KMG Élite Boca del Río", direccion: "Calle Antonio de Alaminos, Col. Virginia, Boca del Río", referencia: "", horario: "Horario por definir", lat: 19.1647773, lng: -96.1206622, mapa: "" }
+    // El horario se acuerda por WhatsApp con cada cliente: "horario" va vacío a propósito.
+    { nombre: "Divertiplaza", direccion: "Fidel Velázquez 526, Río Medio II, Fraccionamiento del Norte, 91809 Veracruz, Ver.", referencia: "", horario: "", lat: 19.2127177, lng: -96.2008532, mapa: "" },
+    { nombre: "Soriana Hiper Los Pinos", direccion: "Dr. Rafael Cuervo 60, Playa Linda, 91810 Veracruz, Ver.", referencia: "", horario: "", lat: 19.2140814, lng: -96.1722379, mapa: "" },
+    { nombre: "KMG Élite Boca del Río", direccion: "C. Alaminos 152, Virginia, 94294 Veracruz, Ver.", referencia: "", horario: "", lat: 19.1647773, lng: -96.1206622, mapa: "" }
   ],
 
   // Inicio de los mensajes de WhatsApp. El resto se arma solo.
