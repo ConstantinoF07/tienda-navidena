@@ -1,0 +1,11 @@
+// Configuración para publicar en Cloudflare (Workers con archivos estáticos).
+// El sitio no tiene código de servidor: solo se sirven los archivos de esta carpeta.
+{
+  "name": "tienda-navidena",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

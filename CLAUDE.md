@@ -10,8 +10,9 @@ dominio propio. Dueño: usuario principiante en GitHub; explicar en español, co
 - Sin backend, sin base de datos, sin pagos en línea, sin frameworks. HTML + CSS + JS puro.
 - Todo pedido termina en `https://wa.me/522291433176?text=...` con el mensaje armado.
   Los mensajes usan `*negritas*` de WhatsApp en nombre de producto, precio, total y etiquetas.
-- No hay envío a domicilio: tres puntos de entrega (Divertiplaza, Soriana Hiper Los Pinos,
-  KMG Élite Boca del Río). El cliente elige uno; el más cercano se sugiere con el mapa.
+- No hay envío a domicilio: cuatro puntos de entrega (Divertiplaza, Soriana Hiper Los Pinos,
+  KMG Élite Boca del Río, Walmart Boca del Río). El cliente elige uno; el más cercano se sugiere
+  con el mapa.
 - Nunca mostrar horarios de entrega: se acuerdan por WhatsApp con cada cliente.
 - Piezas únicas: solo hay una de cada producto (`TIENDA.maximoPorProducto = 1`). No hay
   selector de cantidad. Las tres cajas de esferas se venden como media docena ($800), caja
@@ -38,8 +39,10 @@ dominio propio. Dueño: usuario principiante en GitHub; explicar en español, co
 - `img/productos/<id>/`: fotos WebP (1200 px y miniatura 600 px) y `video.mp4` cuadrado de
   720 px, máximo 15 s. Se generan con `tools/optimizar.js` desde las fotos originales, que no
   están en el repositorio.
-- `_headers`: cabeceras de seguridad para Cloudflare Pages. `.nojekyll`: necesario para que
+- `_headers`: cabeceras de seguridad para Cloudflare. `.nojekyll`: necesario para que
   GitHub Pages publique sin fallar.
+- `wrangler.jsonc` y `.assetsignore`: configuración para publicar en Cloudflare (Workers con
+  archivos estáticos, conectado al repositorio). No hace falta tocarlos.
 
 ## Cómo trabajar
 

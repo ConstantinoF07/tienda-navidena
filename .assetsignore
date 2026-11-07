@@ -1,0 +1,10 @@
+# Archivos que NO se publican en Cloudflare (solo son de trabajo)
+.git
+.gitignore
+.assetsignore
+wrangler.jsonc
+CLAUDE.md
+README.md
+node_modules
+tools
+PLAN.md
