@@ -19,11 +19,15 @@ const TIENDA = {
   avisoPiezaUnica: "Pieza única: solo tenemos una.",
 
   // Puntos de entrega. No hay envío a domicilio: el cliente elige dónde recoger.
-  // EDITAR: nombre, dirección, horario y, si quieres, el enlace de Google Maps.
+  // EDITAR: nombre, dirección, referencia, horario y coordenadas (lat, lng).
+  // Para sacar lat y lng: en Google Maps mantén presionado el punto exacto y arriba
+  // aparecen dos números, por ejemplo 19.2006, -96.1360. El primero es lat, el segundo lng.
+  // "mapa" es opcional: un enlace propio de "Cómo llegar"; si va vacío se arma solo.
   puntosEntrega: [
-    { nombre: "Punto de entrega 1", direccion: "Dirección por definir", horario: "Horario por definir", mapa: "" },
-    { nombre: "Punto de entrega 2", direccion: "Dirección por definir", horario: "Horario por definir", mapa: "" },
-    { nombre: "Punto de entrega 3", direccion: "Dirección por definir", horario: "Horario por definir", mapa: "" }
+    // Direcciones tomadas del mapa, POR CONFIRMAR. Falta el horario de cada punto.
+    { nombre: "Divertiplaza", direccion: "Calle Fidel Velázquez, Col. Villa Rica, Veracruz", referencia: "", horario: "Horario por definir", lat: 19.2127177, lng: -96.2008532, mapa: "" },
+    { nombre: "Soriana Hiper Los Pinos", direccion: "Av. Cuauhtémoc, Col. Playa Linda, Veracruz", referencia: "", horario: "Horario por definir", lat: 19.2140814, lng: -96.1722379, mapa: "" },
+    { nombre: "KMG Élite Boca del Río", direccion: "Calle Antonio de Alaminos, Col. Virginia, Boca del Río", referencia: "", horario: "Horario por definir", lat: 19.1647773, lng: -96.1206622, mapa: "" }
   ],
 
   // Inicio de los mensajes de WhatsApp. El resto se arma solo.

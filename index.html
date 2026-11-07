@@ -29,7 +29,7 @@
   <meta name="theme-color" content="#8b1e2d">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <!-- El ?v= cambia en cada publicación para que los celulares no usen archivos viejos -->
-  <link rel="stylesheet" href="css/estilos.css?v=20261107d">
+  <link rel="stylesheet" href="css/estilos.css?v=20261107e">
 
   <script type="application/ld+json">
   {
@@ -97,6 +97,14 @@
     <section id="entrega" class="puntos" aria-labelledby="puntos-titulo">
       <h2 id="puntos-titulo">Puntos de entrega</h2>
       <p class="puntos__intro">No hacemos envíos a domicilio. Eliges el punto que te quede mejor y pasas por tu pedido.</p>
+      <div class="mapa-bloque">
+        <div class="mapa__acciones">
+          <button type="button" class="boton boton--primario" data-accion="mapa-ubicacion" data-mapa-destino="pagina">Ver cuál me queda más cerca</button>
+        </div>
+        <div class="mapa" data-mapa="pagina" role="region" aria-label="Mapa de los puntos de entrega"></div>
+        <p class="mapa__aviso" data-mapa-aviso="pagina"></p>
+        <p class="nota">Tu ubicación solo se usa en tu teléfono para calcular distancias. No se guarda ni se envía a ningún lado.</p>
+      </div>
       <ul class="puntos__lista" data-puntos></ul>
     </section>
   </main>
@@ -120,7 +128,7 @@
 
   <div class="toast" data-toast role="status" aria-live="polite"></div>
 
-  <script src="js/productos.js?v=20261107d" defer></script>
-  <script src="js/app.js?v=20261107d" defer></script>
+  <script src="js/productos.js?v=20261107e" defer></script>
+  <script src="js/app.js?v=20261107e" defer></script>
 </body>
 </html>

@@ -536,8 +536,9 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     const entregas = puntosEntrega().map((pt, i) => {
       const marcada = pt.nombre === datosPedido.entrega || (!datosPedido.entrega && i === 0);
       const detalle = [pt.direccion, pt.horario].filter(Boolean).join(". ");
-      return `<label class="opcion"><input type="radio" name="entrega" value="${esc(pt.nombre)}"${marcada ? " checked" : ""}> <span><strong>${esc(pt.nombre)}</strong>${detalle ? `<small>${esc(detalle)}</small>` : ""}</span></label>`;
-    }).join("");
+      const d = distancias[pt.nombre];
+      return `<label class="opcion"><input type="radio" name="entrega" value="${esc(pt.nombre)}"${marcada ? " checked" : ""}> <span><strong>${esc(pt.nombre)}</strong>${d != null ? ` <b>${esc(textoKm(d))}</b>` : ""}${detalle ? `<small>${esc(detalle)}</small>` : ""}</span></label>`;
+    }).join("") + (puntosConCoordenadas().length ? bloqueMapa("carrito", "¿Cuál me queda más cerca?") : "");
 
     cont.innerHTML = `${cerrar}
 <h2 id="carrito-titulo" class="dialogo__titulo">Tu pedido</h2>
@@ -604,6 +605,16 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
         if (!p || !p.disponible || !tienePrecio(p)) return;
         const n = agregarAlCarrito({ id: p.id, cantidad: 1, variantes: {}, personalizacion: "", precioUnitario: Number(p.precio) || 0 });
         aviso(n ? `${p.nombre} agregado al carrito` : "Ese producto ya está en tu pedido: es pieza única");
+        break;
+      }
+      case "mapa-ver": {
+        const destino = el.dataset.mapaDestino;
+        mostrarMapa($(`[data-mapa="${destino}"]`), seleccionadorPara(destino));
+        break;
+      }
+      case "mapa-ubicacion": {
+        const destino = el.dataset.mapaDestino;
+        pedirUbicacion(el, $(`[data-mapa="${destino}"]`), seleccionadorPara(destino));
         break;
       }
       case "galeria-mover":
@@ -694,23 +705,236 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     }
   }
 
+  /* ---------- Mapa de puntos de entrega (Leaflet + OpenStreetMap, sin llaves) ---------- */
+  const MAPA_JS = "js/vendor/leaflet/leaflet.js";
+  const MAPA_CSS = "js/vendor/leaflet/leaflet.css";
+  const CENTRO_CIUDAD = [19.19, -96.14];
+  let cargaLeaflet = null;
+  const distancias = {};   // nombre del punto -> km desde el cliente
+  let ubicacion = null;    // { lat, lng } del cliente, solo en memoria
+  const mapas = new Map(); // contenedor -> estado del mapa
+
+  function cargarLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (cargaLeaflet) return cargaLeaflet;
+    cargaLeaflet = new Promise((resolve, reject) => {
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = MAPA_CSS;
+      document.head.appendChild(css);
+      const s = document.createElement("script");
+      s.src = MAPA_JS;
+      s.onload = () => resolve(window.L);
+      s.onerror = () => reject(new Error("No se pudo cargar el mapa"));
+      document.head.appendChild(s);
+    });
+    return cargaLeaflet;
+  }
+
+  const tieneCoordenadas = (pt) => isFinite(pt.lat) && isFinite(pt.lng);
+  const puntosConCoordenadas = () => puntosEntrega().filter(tieneCoordenadas);
+
+  function kmEntre(a, b) {
+    const R = 6371;
+    const rad = (x) => x * Math.PI / 180;
+    const dLat = rad(b.lat - a.lat);
+    const dLng = rad(b.lng - a.lng);
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  }
+  const textoKm = (km) => (km < 1 ? `a ${Math.round(km * 1000)} m` : `a ${km.toFixed(1)} km`);
+  const enlaceComoLlegar = (pt) => pt.mapa
+    || (tieneCoordenadas(pt) ? `https://www.google.com/maps/dir/?api=1&destination=${pt.lat},${pt.lng}` : "");
+
+  function puntoMasCercano() {
+    let mejor = null;
+    puntosConCoordenadas().forEach((pt) => {
+      const d = distancias[pt.nombre];
+      if (d != null && (!mejor || d < distancias[mejor.nombre])) mejor = pt;
+    });
+    return mejor;
+  }
+
+  function popupPunto(pt) {
+    const partes = [`<strong>${esc(pt.nombre)}</strong>`];
+    if (pt.direccion) partes.push(esc(pt.direccion));
+    if (pt.referencia) partes.push(esc(pt.referencia));
+    if (pt.horario) partes.push(esc(pt.horario));
+    if (distancias[pt.nombre] != null) partes.push(`<em>${esc(textoKm(distancias[pt.nombre]))} de ti</em>`);
+    const link = enlaceComoLlegar(pt);
+    if (link) partes.push(`<a href="${esc(link)}" target="_blank" rel="noopener">Cómo llegar</a>`);
+    return partes.join("<br>");
+  }
+
+  function avisoMapa(cont, texto) {
+    if (!cont) return;
+    const el = $(`[data-mapa-aviso="${cont.dataset.mapa}"]`);
+    if (el) el.textContent = texto || "";
+  }
+
+  function marcarCercano(estado) {
+    const cercano = puntoMasCercano();
+    estado.marcadores.forEach((m, i) => {
+      const pt = estado.puntos[i];
+      const el = m.getElement();
+      if (el) el.classList.toggle("is-cercano", Boolean(cercano && cercano.nombre === pt.nombre));
+      m.setPopupContent(popupPunto(pt));
+    });
+  }
+
+  function pintarUsuario(estado) {
+    if (!ubicacion) return;
+    const { L, mapa } = estado;
+    if (estado.marcadorUsuario) {
+      estado.marcadorUsuario.setLatLng([ubicacion.lat, ubicacion.lng]);
+    } else {
+      estado.marcadorUsuario = L.circleMarker([ubicacion.lat, ubicacion.lng], {
+        radius: 9, color: "#fff", weight: 3, fillColor: "#1a73e8", fillOpacity: 1
+      }).addTo(mapa).bindPopup("Tú estás aquí");
+    }
+    marcarCercano(estado);
+    const grupo = L.featureGroup(estado.marcadores.concat([estado.marcadorUsuario]));
+    mapa.fitBounds(grupo.getBounds().pad(0.25));
+  }
+
+  function mostrarMapa(cont, alSeleccionar) {
+    if (!cont) return Promise.resolve(null);
+    cont.hidden = false;
+    if (mapas.has(cont)) {
+      const estado = mapas.get(cont);
+      setTimeout(() => estado.mapa.invalidateSize(), 50);
+      return Promise.resolve(estado);
+    }
+    return cargarLeaflet().then((L) => {
+      if (mapas.has(cont)) return mapas.get(cont);
+      const puntos = puntosConCoordenadas();
+      const mapa = L.map(cont, { scrollWheelZoom: false });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+      }).addTo(mapa);
+      const marcadores = puntos.map((pt, i) => {
+        const icono = L.divIcon({
+          className: "mapa__pin", html: `<span>${i + 1}</span>`,
+          iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -18]
+        });
+        const m = L.marker([pt.lat, pt.lng], { icon: icono, title: pt.nombre }).addTo(mapa);
+        m.bindPopup(popupPunto(pt));
+        m.on("click", () => { if (alSeleccionar) alSeleccionar(pt, false); });
+        return m;
+      });
+      if (puntos.length) mapa.fitBounds(L.featureGroup(marcadores).getBounds().pad(0.3));
+      else mapa.setView(CENTRO_CIUDAD, 12);
+      const estado = { L, mapa, marcadores, puntos, marcadorUsuario: null };
+      mapas.set(cont, estado);
+      if (ubicacion) pintarUsuario(estado);
+      return estado;
+    }).catch(() => {
+      cont.innerHTML = '<p class="mapa__error">No se pudo cargar el mapa. Elige tu punto en la lista.</p>';
+      return null;
+    });
+  }
+
+  function pedirUbicacion(boton, cont, alSeleccionar) {
+    if (!navigator.geolocation) {
+      avisoMapa(cont, "Tu navegador no permite ubicar tu posición. Elige el punto a mano.");
+      return;
+    }
+    const original = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = "Buscando tu ubicación…";
+    const terminar = () => { boton.disabled = false; boton.textContent = original; };
+    navigator.geolocation.getCurrentPosition((pos) => {
+      ubicacion = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      puntosConCoordenadas().forEach((pt) => { distancias[pt.nombre] = kmEntre(ubicacion, pt); });
+      terminar();
+      const cercano = puntoMasCercano();
+      mostrarMapa(cont, alSeleccionar).then((estado) => { if (estado) pintarUsuario(estado); });
+      renderPuntos();
+      if (cercano && alSeleccionar) alSeleccionar(cercano, true);
+      avisoMapa(cont, cercano
+        ? `El más cercano a ti es ${cercano.nombre}, ${textoKm(distancias[cercano.nombre])}.`
+        : "No hay puntos con ubicación todavía.");
+    }, (err) => {
+      terminar();
+      mostrarMapa(cont, alSeleccionar);
+      avisoMapa(cont, err && err.code === 1
+        ? "No diste permiso de ubicación. Puedes elegir el punto a mano en el mapa o en la lista."
+        : "No pudimos obtener tu ubicación. Elige el punto a mano en el mapa o en la lista.");
+    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+  }
+
+  /* Qué pasa al elegir un punto desde el mapa, según dónde esté el mapa */
+  function seleccionadorPara(destino) {
+    if (destino === "carrito") {
+      return (pt, automatico) => {
+        const radio = $(`[data-carrito-form] input[name='entrega'][value="${pt.nombre.replace(/"/g, '\\"')}"]`);
+        if (radio) radio.checked = true;
+        datosPedido.entrega = pt.nombre;
+        actualizarEnlacePedido();
+        if (automatico) aviso(`Elegimos el punto más cercano: ${pt.nombre}`);
+      };
+    }
+    return (pt) => {
+      $$("[data-puntos] .punto").forEach((li) => li.classList.toggle("is-cercano", li.dataset.nombre === pt.nombre));
+    };
+  }
+
+  function bloqueMapa(destino, textoBoton) {
+    return `
+<div class="mapa-bloque mapa-bloque--${esc(destino)}">
+  <div class="mapa__acciones">
+    <button type="button" class="boton boton--texto" data-accion="mapa-ubicacion" data-mapa-destino="${esc(destino)}">${esc(textoBoton)}</button>
+    <button type="button" class="boton boton--texto" data-accion="mapa-ver" data-mapa-destino="${esc(destino)}">Ver mapa</button>
+  </div>
+  <div class="mapa mapa--chico" data-mapa="${esc(destino)}" hidden></div>
+  <p class="mapa__aviso" data-mapa-aviso="${esc(destino)}"></p>
+</div>`;
+  }
+
   /* ---------- Puntos de entrega en la página ---------- */
   function renderPuntos() {
     const cont = $("[data-puntos]");
     if (!cont) return;
-    const puntos = puntosEntrega();
+    const puntos = puntosEntrega().slice();
     const seccion = cont.closest("section");
     if (!puntos.length) {
       if (seccion) seccion.hidden = true;
       return;
     }
-    cont.innerHTML = puntos.map((pt) => `
-<li class="punto">
+    const cercano = puntoMasCercano();
+    if (cercano) puntos.sort((a, b) => (distancias[a.nombre] ?? 1e9) - (distancias[b.nombre] ?? 1e9));
+    cont.innerHTML = puntos.map((pt) => {
+      const d = distancias[pt.nombre];
+      const link = enlaceComoLlegar(pt);
+      return `
+<li class="punto${cercano && cercano.nombre === pt.nombre ? " is-cercano" : ""}" data-nombre="${esc(pt.nombre)}">
   <strong class="punto__nombre">${esc(pt.nombre)}</strong>
   ${pt.direccion ? `<span class="punto__dato">${esc(pt.direccion)}</span>` : ""}
+  ${pt.referencia ? `<span class="punto__dato">${esc(pt.referencia)}</span>` : ""}
   ${pt.horario ? `<span class="punto__dato">${esc(pt.horario)}</span>` : ""}
-  ${pt.mapa ? `<a class="punto__mapa" href="${esc(pt.mapa)}" target="_blank" rel="noopener">Ver en el mapa</a>` : ""}
-</li>`).join("");
+  ${d != null ? `<span class="punto__distancia">${esc(textoKm(d))}${cercano && cercano.nombre === pt.nombre ? ", el más cercano" : ""}</span>` : ""}
+  ${link ? `<a class="punto__mapa" href="${esc(link)}" target="_blank" rel="noopener">Cómo llegar</a>` : ""}
+</li>`;
+    }).join("");
+  }
+
+  /* El mapa de la sección se carga solo cuando el visitante llega a ella */
+  function prepararMapaPagina() {
+    const cont = $('[data-mapa="pagina"]');
+    if (!cont || !puntosConCoordenadas().length) {
+      if (cont) cont.closest(".mapa-bloque").hidden = true;
+      return;
+    }
+    const abrir = () => mostrarMapa(cont, seleccionadorPara("pagina"));
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entradas) => {
+        if (entradas.some((e) => e.isIntersecting)) { io.disconnect(); abrir(); }
+      }, { rootMargin: "200px" });
+      io.observe(cont);
+    } else {
+      abrir();
+    }
   }
 
   /* ---------- Datos estructurados para Google ---------- */
@@ -755,6 +979,7 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     renderFiltros();
     renderCatalogo();
     renderPuntos();
+    prepararMapaPagina();
     actualizarContador();
     datosEstructurados();
     if (location.hash.indexOf("#p-") === 0) abrirFicha(location.hash.slice(3));
