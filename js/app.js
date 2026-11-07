@@ -923,7 +923,7 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     return `
 <div class="mapa-bloque mapa-bloque--${esc(destino)}">
   <div class="mapa__acciones">
-    <button type="button" class="boton boton--texto" data-accion="mapa-ubicacion" data-mapa-destino="${esc(destino)}">${esc(textoBoton)}</button>
+    <button type="button" class="boton boton--dorado boton--chico" data-accion="mapa-ubicacion" data-mapa-destino="${esc(destino)}">${esc(textoBoton)}</button>
     <button type="button" class="boton boton--texto" data-accion="mapa-ver" data-mapa-destino="${esc(destino)}">Ver mapa</button>
   </div>
   <div class="mapa mapa--chico" data-mapa="${esc(destino)}" hidden></div>
