@@ -161,9 +161,13 @@
     });
     const partes = [TIENDA.mensajes.pedido, "", ...lineas, "", `*Total: ${precio(totalCarrito())}*`];
     const punto = buscarPunto(datosPedido.entrega);
-    if (punto) partes.push(`*Recoger en:* ${punto.nombre}${punto.direccion ? " (" + punto.direccion + ")" : ""}`);
-    if (datosPedido.nombre.trim()) partes.push(`*Nombre:* ${datosPedido.nombre.trim()}`);
-    if (datosPedido.nota.trim()) partes.push(`*Comentarios:* ${datosPedido.nota.trim()}`);
+    if (punto) partes.push("", `*Recoger en:* ${punto.nombre}${punto.direccion ? " (" + punto.direccion + ")" : ""}`);
+    /* Nombre y comentarios van en su propio bloque, separados del punto de entrega */
+    const nombre = datosPedido.nombre.trim();
+    const nota = datosPedido.nota.trim();
+    if (nombre || nota) partes.push("");
+    if (nombre) partes.push(`*Nombre:* ${nombre}`);
+    if (nota) partes.push(`*Comentarios:* ${nota}`);
     return partes.join("\n");
   }
 
