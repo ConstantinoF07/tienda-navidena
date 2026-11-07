@@ -27,7 +27,9 @@ const TIENDA = {
     // El horario se acuerda por WhatsApp con cada cliente: "horario" va vacío a propósito.
     { nombre: "Divertiplaza", direccion: "Fidel Velázquez 526, Río Medio II, Fraccionamiento del Norte, 91809 Veracruz, Ver.", referencia: "", horario: "", lat: 19.2127177, lng: -96.2008532, mapa: "" },
     { nombre: "Soriana Hiper Los Pinos", direccion: "Dr. Rafael Cuervo 60, Playa Linda, 91810 Veracruz, Ver.", referencia: "", horario: "", lat: 19.2140814, lng: -96.1722379, mapa: "" },
-    { nombre: "KMG Élite Boca del Río", direccion: "C. Alaminos 152, Virginia, 94294 Veracruz, Ver.", referencia: "", horario: "", lat: 19.1647773, lng: -96.1206622, mapa: "" }
+    { nombre: "KMG Élite Boca del Río", direccion: "C. Alaminos 152, Virginia, 94294 Veracruz, Ver.", referencia: "", horario: "", lat: 19.1647773, lng: -96.1206622, mapa: "" },
+    // Coordenadas APROXIMADAS (verificar en el mapa de la página; "mapa" lleva el enlace real de Google Maps)
+    { nombre: "Walmart Boca del Río", direccion: "C. Vivero 280, Jardines del Virginia, 94298 Veracruz, Ver.", referencia: "", horario: "", lat: 19.1588, lng: -96.1140, mapa: "https://maps.app.goo.gl/nzyGEqAvgL6tsZs66" }
   ],
 
   // Inicio de los mensajes de WhatsApp. El resto se arma solo.
