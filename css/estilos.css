@@ -486,9 +486,6 @@ h1, h2, h3, .marca {
   font-size: 0.9rem;
   white-space: nowrap;
 }
-@media (min-width: 560px) {
-  .tarjeta__acciones { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-}
 
 /* ---------- Botones ---------- */
 .boton {
@@ -1184,6 +1181,36 @@ legend {
 }
 .flotante:hover { transform: scale(1.05); }
 .flotante svg { width: 32px; height: 32px; fill: #fff; }
+
+/* ---------- Barra inferior "Concluir compra" (solo con carrito lleno) ---------- */
+.barra-pedido {
+  position: fixed;
+  left: 16px;
+  right: 90px;
+  bottom: 16px;
+  z-index: 30;
+}
+.barra-pedido[hidden] { display: none; }
+.barra-pedido .boton {
+  width: 100%;
+  box-shadow: 0 10px 24px rgba(11, 61, 34, 0.35);
+}
+.barra-pedido__total {
+  margin-left: 2px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(11, 61, 34, 0.25);
+  font-weight: 600;
+}
+.barra-pedido__total:empty { display: none; }
+.icono-wa {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+@media (min-width: 720px) {
+  .barra-pedido { left: auto; width: 380px; }
+}
 
 /* ---------- Aviso breve ---------- */
 .toast {
