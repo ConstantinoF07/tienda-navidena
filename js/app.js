@@ -622,8 +622,22 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     temporizadorToast = setTimeout(() => t.classList.remove("is-visible"), 2200);
   }
 
+  /* ---------- Menú de la cabecera (celular) ---------- */
+  function alternarMenu(abrir) {
+    const cab = $(".cabecera");
+    const btn = $(".menu-boton");
+    if (!cab || !btn) return;
+    const estado = typeof abrir === "boolean" ? abrir : !cab.classList.contains("is-abierto");
+    cab.classList.toggle("is-abierto", estado);
+    btn.setAttribute("aria-expanded", String(estado));
+    btn.setAttribute("aria-label", estado ? "Cerrar menú" : "Abrir menú");
+  }
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") alternarMenu(false); });
+
   /* ---------- Eventos ---------- */
   document.addEventListener("click", (e) => {
+    /* El menú se cierra al elegir una sección o al tocar fuera de la cabecera */
+    if (e.target.closest(".menu a") || !e.target.closest(".cabecera")) alternarMenu(false);
     const el = e.target.closest("[data-accion]");
     if (!el) return;
     const accion = el.dataset.accion;
@@ -635,6 +649,9 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
         break;
       case "abrir-carrito":
         abrirCarrito();
+        break;
+      case "menu":
+        alternarMenu();
         break;
       case "cerrar":
         cerrarDialogos();

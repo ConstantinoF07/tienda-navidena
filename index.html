@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap">
   <!-- El ?v= cambia en cada publicación para que los celulares no usen archivos viejos -->
-  <link rel="stylesheet" href="css/estilos.css?v=20261108n">
+  <link rel="stylesheet" href="css/estilos.css?v=20261108o">
   <link rel="preload" as="image" href="img/portada/gnomo-m.webp" media="(max-width: 879px)">
   <link rel="preload" as="image" href="img/portada/gnomo.webp" media="(min-width: 880px)">
 
@@ -61,9 +61,14 @@
 
   <header class="cabecera">
     <a class="marca" href="#inicio"><span data-tienda="nombre">Tu Rinconcito Navideño</span></a>
-    <nav class="menu" aria-label="Secciones del sitio">
+    <!-- En celular el menú se abre con el botón de tres líneas; en pantallas anchas va en línea -->
+    <button type="button" class="menu-boton" data-accion="menu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="menu" class="menu" aria-label="Secciones del sitio">
       <a href="#como-pedir">Cómo pedir</a>
       <a href="#entrega">Puntos de entrega</a>
+      <a href="#pago" class="menu__solo-movil">Formas de pago</a>
     </nav>
     <button type="button" class="boton-carrito" data-accion="abrir-carrito" aria-label="Abrir tu pedido">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -180,7 +185,7 @@
 
   <div class="toast" data-toast role="status" aria-live="polite"></div>
 
-  <script src="js/productos.js?v=20261108n" defer></script>
-  <script src="js/app.js?v=20261108n" defer></script>
+  <script src="js/productos.js?v=20261108o" defer></script>
+  <script src="js/app.js?v=20261108o" defer></script>
 </body>
 </html>
