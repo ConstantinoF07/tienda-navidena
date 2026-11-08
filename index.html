@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap">
   <!-- El ?v= cambia en cada publicación para que los celulares no usen archivos viejos -->
-  <link rel="stylesheet" href="css/estilos.css?v=20261108l">
+  <link rel="stylesheet" href="css/estilos.css?v=20261108n">
   <link rel="preload" as="image" href="img/portada/gnomo-m.webp" media="(max-width: 879px)">
   <link rel="preload" as="image" href="img/portada/gnomo.webp" media="(min-width: 880px)">
 
@@ -61,6 +61,10 @@
 
   <header class="cabecera">
     <a class="marca" href="#inicio"><span data-tienda="nombre">Tu Rinconcito Navideño</span></a>
+    <nav class="menu" aria-label="Secciones del sitio">
+      <a href="#como-pedir">Cómo pedir</a>
+      <a href="#entrega">Puntos de entrega</a>
+    </nav>
     <button type="button" class="boton-carrito" data-accion="abrir-carrito" aria-label="Abrir tu pedido">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 7h13l-1.5 8h-10z"/>
@@ -104,7 +108,7 @@
       <div class="rejilla" data-catalogo></div>
     </section>
 
-    <section class="como-pedir" aria-labelledby="como-titulo">
+    <section id="como-pedir" class="como-pedir" aria-labelledby="como-titulo">
       <h2 id="como-titulo" class="titulo-seccion">Cómo pedir</h2>
       <ol class="pasos">
         <li><strong>Elige tus adornos</strong>Agrega al pedido lo que te guste, con color o nombre si aplica.</li>
@@ -176,7 +180,7 @@
 
   <div class="toast" data-toast role="status" aria-live="polite"></div>
 
-  <script src="js/productos.js?v=20261108l" defer></script>
-  <script src="js/app.js?v=20261108l" defer></script>
+  <script src="js/productos.js?v=20261108n" defer></script>
+  <script src="js/app.js?v=20261108n" defer></script>
 </body>
 </html>

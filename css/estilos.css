@@ -95,11 +95,11 @@ h1, h2, h3, .marca {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 4px 12px;
+  padding: 10px 16px 8px;
   background: rgba(246, 239, 227, 0.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -118,6 +118,41 @@ h1, h2, h3, .marca {
 @media (min-width: 560px) {
   .marca { font-size: 1.15rem; }
 }
+
+/* Menú de secciones: segunda fila en celular, en línea en pantallas anchas */
+.menu {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.menu::-webkit-scrollbar { display: none; }
+.menu a {
+  flex: 0 0 auto;
+  padding: 4px 0;
+  color: var(--verde-oscuro);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.menu a:hover { border-bottom-color: var(--dorado); }
+@media (min-width: 720px) {
+  .cabecera {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding: 10px 24px;
+  }
+  .menu { grid-column: 2; grid-row: 1; justify-content: center; gap: 28px; }
+  .menu a { font-size: 0.95rem; }
+  .boton-carrito { grid-column: 3; }
+}
+
+/* Al saltar a una sección desde el menú, dejar espacio para la cabecera fija */
+.catalogo, .como-pedir, .puntos, .pago { scroll-margin-top: 100px; }
+@media (min-width: 720px) {
+  .catalogo, .como-pedir, .puntos, .pago { scroll-margin-top: 76px; }
+}
 .marca::before {
   content: "";
   flex: 0 0 auto;
@@ -128,6 +163,9 @@ h1, h2, h3, .marca {
 }
 
 .boton-carrito {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
   position: relative;
   display: inline-flex;
   align-items: center;
