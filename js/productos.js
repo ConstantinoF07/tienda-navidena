@@ -8,7 +8,7 @@
 
 const TIENDA = {
   nombre: "Tu Rinconcito Navideño",            // nombre de la tienda
-  eslogan: "Piezas únicas hechas a mano en Veracruz. Elige las tuyas, pide por WhatsApp y recógelas en tu punto de entrega en Veracruz o Boca del Río.",
+  eslogan: "Piezas únicas y artesanales. Elige las tuyas, pide por WhatsApp y recógelas en tu punto de entrega en Veracruz o Boca del Río.",
   whatsapp: "522291433176",                    // lada + número, sin "+" ni espacios
   ciudad: "Veracruz, Ver.",
   moneda: "MXN",
@@ -40,7 +40,7 @@ const TIENDA = {
   },
 
   // Aviso corto que aparece arriba del catálogo. Déjalo en "" para ocultarlo.
-  aviso: "Piezas hechas a mano en cantidades limitadas. Pedidos navideños hasta el 20 de diciembre."
+  aviso: "Piezas artesanales únicas: solo tenemos una de cada una. Pedidos navideños hasta el 20 de diciembre."
 };
 
 /* ---------------------------------------------------------------------
@@ -96,7 +96,7 @@ const PRODUCTOS = [
     precioAnterior: null,
     categoria: "Figuras",
     descripcionCorta: "Santa gnomo con farol y letrero de Bienvenidos para recibir en la puerta.",
-    descripcion: "Un Santa gnomo de 53 cm de alto que recibe a tus visitas con su farol y un letrero de Bienvenidos. Es una pieza con presencia para la entrada de la casa, el recibidor o el pie del árbol. Adorno navideño artesanal, hecho a mano.",
+    descripcion: "Un Santa gnomo de 53 cm de alto que recibe a tus visitas con su farol y un letrero de Bienvenidos. Es una pieza con presencia para la entrada de la casa, el recibidor o el pie del árbol. Adorno navideño artesanal.",
     medidas: "48 cm de ancho x 53 cm de alto",
     material: "",
     imagenes: ["img/productos/gnomo-santa-entrada/01.webp"],
