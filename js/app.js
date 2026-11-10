@@ -594,7 +594,7 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
   <label class="campo"><span>Comentarios (opcional)</span><textarea name="nota" rows="2" maxlength="300">${esc(datosPedido.nota)}</textarea></label>
 </form>
 <div class="acciones acciones--columna">
-  <a class="boton boton--whatsapp boton--grande" data-carrito-pedir href="${esc(urlWhatsApp(mensajePedido()))}" target="_blank" rel="noopener">${ICONO_WHATSAPP} Enviar pedido por WhatsApp</a>
+  <a class="boton boton--whatsapp boton--grande" data-carrito-pedir href="${esc(urlWhatsApp(mensajePedido()))}" target="_blank" rel="noopener">${ICONO_WHATSAPP} Pedir por WhatsApp</a>
   <button type="button" class="boton boton--texto" data-accion="vaciar">Vaciar carrito</button>
 </div>
 <p class="nota">Se abre WhatsApp con tu pedido ya escrito. Por ahí te confirmamos disponibilidad, total y el día para pasar por él.</p>`;
