@@ -38,7 +38,10 @@ en https://turinconcitonavideno.com; GitHub Pages queda solo como respaldo. Due�
 - `img/productos/<id>/`: fotos WebP (1200 px y miniatura 600 px) y `video.mp4` cuadrado de
   720 px, máximo 15 s. Se generan con `tools/optimizar.js` desde las fotos originales, que no
   están en el repositorio.
-- `_headers`: cabeceras de seguridad para Cloudflare. `.nojekyll`: necesario para que
+- `js/meta-pixel.js`: píxel de Meta (ID 1965712534397515). Los eventos ViewContent, AddToCart,
+  InitiateCheckout y Contact (tocar "Pedir por WhatsApp") se mandan desde `js/app.js` con `rastrear()`.
+- `_headers`: cabeceras de seguridad para Cloudflare; la política CSP autoriza connect.facebook.net y
+  www.facebook.com para el píxel. Cualquier script externo nuevo hay que agregarlo ahí. `.nojekyll`: necesario para que
   GitHub Pages publique sin fallar.
 - `wrangler.jsonc` y `.assetsignore`: configuración para publicar en Cloudflare (Workers con
   archivos estáticos, conectado al repositorio). No hace falta tocarlos.

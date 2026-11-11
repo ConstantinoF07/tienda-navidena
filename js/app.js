@@ -113,6 +113,19 @@
   };
   const textoDisponibilidad = (p) => p.disponibilidad || (maximoDe(p) === 1 ? (TIENDA.avisoPiezaUnica || "") : "");
 
+  /* ---------- Píxel de Meta: eventos para medir y optimizar anuncios ---------- */
+  function rastrear(evento, datos) {
+    if (typeof window.fbq !== "function") return;
+    try { window.fbq("track", evento, datos || {}); } catch (e) { /* el píxel nunca debe romper la tienda */ }
+  }
+  const datosProducto = (p, valor) => ({
+    content_name: p.nombre,
+    content_ids: [p.id],
+    content_type: "product",
+    value: Number(valor != null ? valor : precioMinimo(p)) || 0,
+    currency: TIENDA.moneda || "MXN"
+  });
+
   /* Devuelve cuántas unidades se agregaron de verdad (0 si ya estaba al máximo) */
   function agregarAlCarrito(linea) {
     const p = buscarProducto(linea.id);
@@ -132,6 +145,7 @@
       carrito.push(linea);
     }
     guardarCarrito();
+    if (agregadas > 0 && p) rastrear("AddToCart", datosProducto(p, linea.precioUnitario));
     return agregadas;
   }
 
@@ -497,6 +511,7 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
     fichaActual = id;
     renderFicha(p);
     actualizarFicha();
+    rastrear("ViewContent", datosProducto(p));
     const d = abrirDialogo("ficha");
     if (d) {
       const cuerpo = $(".dialogo__cuerpo", d);
@@ -608,6 +623,15 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
   function abrirCarrito() {
     renderCarrito();
     abrirDialogo("carrito");
+    if (carrito.length) {
+      rastrear("InitiateCheckout", {
+        content_ids: carrito.map((l) => l.id),
+        content_type: "product",
+        num_items: cantidadTotal(),
+        value: totalCarrito(),
+        currency: TIENDA.moneda || "MXN"
+      });
+    }
   }
 
   /* ---------- Aviso breve (toast) ---------- */
@@ -636,6 +660,16 @@ ${q.video ? `<video src="${esc(q.video)}" poster="${esc(imagenPrincipal(q))}" co
 
   /* ---------- Eventos ---------- */
   document.addEventListener("click", (e) => {
+    /* Tocar "Pedir por WhatsApp" es la conversión que importa: se registra como Contact */
+    if (e.target.closest("[data-carrito-pedir]")) {
+      rastrear("Contact", {
+        content_ids: carrito.map((l) => l.id),
+        content_type: "product",
+        num_items: cantidadTotal(),
+        value: totalCarrito(),
+        currency: TIENDA.moneda || "MXN"
+      });
+    }
     /* El menú se cierra al elegir una sección o al tocar fuera de la cabecera */
     if (e.target.closest(".menu a") || !e.target.closest(".cabecera")) alternarMenu(false);
     const el = e.target.closest("[data-accion]");
