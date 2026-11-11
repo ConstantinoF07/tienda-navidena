@@ -115,8 +115,16 @@
 
   /* ---------- Píxel de Meta: eventos para medir y optimizar anuncios ---------- */
   function rastrear(evento, datos) {
-    if (typeof window.fbq !== "function") return;
-    try { window.fbq("track", evento, datos || {}); } catch (e) { /* el píxel nunca debe romper la tienda */ }
+    if (typeof window.fbq !== "function") {
+      console.warn("Píxel de Meta: fbq no está disponible, no se envió", evento);
+      return;
+    }
+    try {
+      window.fbq("track", evento, datos || {});
+      console.info("Píxel de Meta: evento enviado", evento, datos || {});
+    } catch (e) {
+      console.warn("Píxel de Meta: error al enviar", evento, e);
+    }
   }
   const datosProducto = (p, valor) => ({
     content_name: p.nombre,
