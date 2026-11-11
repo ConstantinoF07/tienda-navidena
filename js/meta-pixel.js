@@ -1,5 +1,5 @@
 /* Píxel de Meta (Facebook e Instagram). Código oficial de Meta en archivo propio para que lo
-   permita la política de seguridad del sitio (_headers). ID del píxel: 1965712534397515.
+   permita la política de seguridad del sitio (_headers). ID del píxel: 1125084347155239.
    Los eventos (ver pieza, agregar, concluir compra, pedir por WhatsApp) se mandan desde js/app.js. */
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -9,5 +9,5 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1965712534397515');
+fbq('init', '1125084347155239');
 fbq('track', 'PageView');
